@@ -56,6 +56,16 @@ function wasmThreadsSupported() {
   return true;
 }
 
+function hasCsp(): boolean {
+  const metas = document.getElementsByTagName('meta');
+  for (let i = 0; i < metas.length; i++) {
+    const meta = metas[i];
+    const content = meta.getAttribute('content');
+    if (content && content.includes('\'unsafe-eval\'')) return true;
+  }
+  return false;
+}
+
 function median(values: number[]): number {
   values.sort((a, b) => a - b);
   const half = Math.floor(values.length / 2);
@@ -69,7 +79,7 @@ export default function(opts: CevalOpts): CevalCtrl {
 
   // select wasmx > wasm > asmjs
   let technology: CevalTechnology = 'asmjs';
-  if (typeof WebAssembly === 'object' && WebAssembly.validate(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00))) {
+  if (hasCsp() && typeof WebAssembly === 'object' && WebAssembly.validate(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00))) {
     technology = 'wasm';
     if (officialStockfish(opts.variant.key) && wasmThreadsSupported()) technology = 'wasmx';
   }
