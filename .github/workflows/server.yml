@@ -28,7 +28,7 @@ jobs:
       with:
         fetch-depth: 1
     - run: echo "autoformat=false" > ~/.scalariform.conf
-    - run: mkdir -p target/universal/stage && cp LICENSE COPYING.md README.md target/universal/stage/ && git log -n 1 --pretty=oneline > target/universal/stage/commit.txt
+    - run: mkdir -p target/universal && cp LICENSE COPYING.md README.md target/universal/ && git log -n 1 --pretty=oneline > target/universal/commit.txt
     - uses: actions/cache@v1
       with:
         path: ~/.ivy2/cache
@@ -36,9 +36,9 @@ jobs:
     - uses: olafurpg/setup-scala@49fc8c734ef6916b4e1da8ba8d81bb26a2b46a06
       with:
         java-version: openjdk@1.13
-    - run: ./lila test stage
+    - run: ./lila test dist
     - run: du -d2 -h ~
     - uses: actions/upload-artifact@v1
       with:
         name: lila-server
-        path: target/universal/stage
+        path: target/universal
