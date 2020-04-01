@@ -526,6 +526,7 @@ GET   /api/status                      controllers.Api.status
 GET   /api/users/status                controllers.Api.usersStatus
 GET   /api/crosstable/:u1/:u2          controllers.Api.crosstable(u1: String, u2: String)
 POST  /api/stream/games-by-users       controllers.Api.gamesByUsersStream
+POST  /api/stream/games-by-ids         controllers.Api.gamesByIdsStream
 GET   /api/stream/event                controllers.Api.eventStream
 GET   /api/account                     controllers.Account.apiMe
 GET   /api/account/playing             controllers.Account.apiNowPlaying
@@ -534,6 +535,7 @@ GET   /api/account/kid                 controllers.Account.apiKid
 POST  /api/account/kid                 controllers.Account.apiKidPost
 GET   /api/account/preferences         controllers.Pref.apiGet
 POST  /api/challenge/:user             controllers.Challenge.apiCreate(user: String)
+POST  /api/challenge/:chuser/:user     controllers.Challenge.apiCreateTwo(chuser: String, user: String)
 POST  /api/challenge/$id<\w{8}>/accept  controllers.Challenge.apiAccept(id: String)
 POST  /api/challenge/$id<\w{8}>/decline controllers.Challenge.apiDecline(id: String)
 

@@ -17,11 +17,11 @@ export default function(opts: ChallengeOpts, data: ChallengeData, redraw: () => 
   }
 
   function countActiveIn() {
-    return data.in.filter(c => !c.declined).length;
+    return data.in.filter(c => !c.declined).length + data.out.filter(c => !c.declined).length;
   }
 
   function notifyNew() {
-    data.in.forEach(c => {
+    data.in.concat(data.out).forEach(c => {
       if (li.once('c-' + c.id)) {
         if (!li.quietMode && data.in.length <= 3) {
           opts.show();

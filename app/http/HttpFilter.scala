@@ -14,6 +14,7 @@ final class HttpFilter(env: Env)(implicit val mat: Materializer) extends Filter 
 
   def apply(nextFilter: RequestHeader => Fu[Result])(req: RequestHeader): Fu[Result] =
     if (HTTPRequest isAssets req) nextFilter(req) dmap { result =>
+      monitoring(req, nowMillis, result)
       result.withHeaders("Service-Worker-Allowed" -> "/")
     } else {
       val startTime = nowMillis
@@ -29,7 +30,7 @@ final class HttpFilter(env: Env)(implicit val mat: Materializer) extends Filter 
     val actionName = HTTPRequest actionName req
     val reqTime    = nowMillis - startTime
     val statusCode = result.header.status
-    if (env.isDev) logger.info(s"$statusCode $req $actionName ${reqTime}ms")
+    if (env.isDev || true) logger.info(s"$statusCode $req $actionName ${reqTime}ms")
     else {
       val client = HTTPRequest clientName req
       httpMon.time(actionName, client, req.method, statusCode).record(reqTime)

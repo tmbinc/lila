@@ -2,6 +2,7 @@ package lila.challenge
 
 import org.joda.time.DateTime
 import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
 
 import lila.common.Bus
 import lila.common.config.Max

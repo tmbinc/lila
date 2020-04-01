@@ -34,6 +34,19 @@ final class GamesByUsersStream(gameRepo: lila.game.GameRepo)(implicit ec: scala.
       }
     }
 
+  def apply2(gameIds: Set[Game.ID]): Source[JsObject, _] =
+    blueprint mapMaterializedValue { queue =>
+      def matches(game: Game) = gameIds(game.id)
+
+      val sub = Bus.subscribeFun(chans: _*) {
+        case StartGame(game) if matches(game)        => queue offer game
+        case FinishGame(game, _, _) if matches(game) => queue offer game
+      }
+      queue.watchCompletion.foreach { _ =>
+        Bus.unsubscribe(sub, chans)
+      }
+    }
+
   implicit private val fenWriter: Writes[FEN] = Writes[FEN] { f =>
     JsString(f.value)
   }

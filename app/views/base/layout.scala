@@ -312,10 +312,11 @@ object layout {
             if (ctx.kid) span(title := trans.kidMode.txt(), cls := "kiddo")(":)")
             else ctx.isBot option botImage,
             a(href := "/")(
-              "lichess",
+              "LSVchess",
               span(if (isProd && !isStage) ".org" else ".dev")
             )
           ),
+          small("(based on lichess)"),
           ctx.blind option h2("Navigation"),
           topnav()
         ),

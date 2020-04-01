@@ -1,10 +1,15 @@
 package lila.challenge
 
+import play.api.libs.json.Json
 import com.github.ghik.silencer.silent
 import org.joda.time.DateTime
 
+import scala.concurrent.Await
 import lila.common.config.Max
+import scala.concurrent.duration._
 import lila.db.dsl._
+import reactivemongo.api.bson._
+
 
 final private class ChallengeRepo(coll: Coll, maxPerUser: Max)(
     implicit ec: scala.concurrent.ExecutionContext

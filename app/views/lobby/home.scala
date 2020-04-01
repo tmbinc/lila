@@ -156,20 +156,20 @@ object home {
         ),
         bits.lastPosts(lastPost),
         div(cls := "lobby__support")(
-          a(href := routes.Plan.index)(
+          a(href := "https://lichess.org/patron")(
             iconTag(patronIconChar),
             span(cls := "lobby__support__text")(
               strong(trans.patron.donate()),
               span(trans.patron.becomePatron())
             )
           ),
-          a(href := "https://shop.spreadshirt.com/lichess-org")(
-            iconTag(""),
-            span(cls := "lobby__support__text")(
-              strong("Swag Store"),
-              span(trans.playChessInStyle())
-            )
-          )
+          //a(href := "https://shop.spreadshirt.com/lichess-org")(
+          //  iconTag(""),
+          //  span(cls := "lobby__support__text")(
+          //    strong("Swag Store"),
+          //    span(trans.playChessInStyle())
+          //  )
+          //)
         ),
         div(cls := "lobby__about")(
           ctx.blind option h2("About"),

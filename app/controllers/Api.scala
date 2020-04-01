@@ -273,11 +273,18 @@ final class Api(
     }.fuccess
   }
 
+  def gamesByIdsStream = Action.async(parse.tolerantText) { implicit req =>
+    val gameIds = req.body.split(',').view.take(300).toSet
+    jsonStream {
+      env.game.gamesByUsersStream.apply2(gameIds)
+    }.fuccess
+  }
+
   private val EventStreamConcurrencyLimitPerUser = new lila.memo.ConcurrencyLimit[String](
     name = "Event Stream API concurrency per user",
     key = "eventStream.concurrency.limit.user",
     ttl = 20 minutes,
-    maxConcurrency = 1
+    maxConcurrency = 100
   )
   def eventStream = Scoped(_.Bot.Play, _.Board.Play, _.Challenge.Read) { _ => me =>
     env.round.proxyRepo.urgentGames(me) flatMap { povs =>
@@ -355,13 +362,13 @@ final class Api(
     name = "API concurrency per IP",
     key = "api.ip",
     ttl = 1 hour,
-    maxConcurrency = 2
+    maxConcurrency = 200
   )
   private[controllers] val GlobalConcurrencyLimitUser = new lila.memo.ConcurrencyLimit[lila.user.User.ID](
     name = "API concurrency per user",
     key = "api.user",
     ttl = 1 hour,
-    maxConcurrency = 1
+    maxConcurrency = 100
   )
   private[controllers] def GlobalConcurrencyLimitPerUserOption[T](
       user: Option[lila.user.User]
